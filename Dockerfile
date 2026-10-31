@@ -20,6 +20,10 @@ RUN sed -i "s|http://deb.debian.org|https://deb.debian.org|g" /etc/apt/sources.l
     && docker-php-ext-install pdo pdo_sqlite \
     && rm -rf /var/lib/apt/lists/*
 
+# A06 Vulnerable & Outdated Components: bundle an OUTDATED busybox (known CVEs)
+# so an SBOM scan of this image has something to find. Unused by the app.
+COPY --from=busybox:1.31.1 /bin/busybox /usr/local/bin/busybox-legacy
+
 COPY src/ /var/www/html/
 RUN chown -R www-data:www-data /var/www/html
 
